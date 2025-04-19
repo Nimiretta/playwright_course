@@ -1,0 +1,39 @@
+{
+    "name": "playwright_course",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "test:ui": "npx playwright test",
+        "ui-mode": "npx playwright test --ui",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "format": "prettier --config .prettierrc src/**/*.ts --check src/",
+        "format:fix": "prettier --config .prettierrc src/**/*.ts --write src/",
+        "prepare": "husky",
+        "lint-check": "npm run lint && npm run format"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Nimiretta/playwright_course.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Nimiretta/playwright_course/issues"
+    },
+    "homepage": "https://github.com/Nimiretta/playwright_course#readme",
+    "description": "",
+    "devDependencies": {
+        "@eslint/js": "^9.25.0",
+        "@playwright/test": "^1.52.0",
+        "@types/node": "^22.14.1",
+        "eslint": "^9.25.0",
+        "eslint-config-prettier": "^10.1.2",
+        "eslint-plugin-prettier": "^5.2.6",
+        "globals": "^16.0.0",
+        "husky": "^9.1.7",
+        "prettier": "^3.5.3",
+        "typescript-eslint": "^8.30.1"
+    }
+}
