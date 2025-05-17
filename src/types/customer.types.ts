@@ -11,3 +11,10 @@ export interface ICustomer {
   phone: string;
   notes?: string;
 }
+
+export interface ICustomerTableRow {
+  Email: string;
+  Name: string;
+  Country: COUNTRIES;
+  'Created On': string;
+}
