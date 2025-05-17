@@ -25,27 +25,23 @@ test.describe('[UI] [Demo Shopping Cart] [E2E]', () => {
       const productPrice = await getProductPrice(product, page);
       expectedTotalPrice += productPrice;
     }
-    const expectedDiscountedPrice = (expectedTotalPrice - (expectedTotalPrice * discountPercent) / 100).toFixed(2);
+    const expectedDiscountedPrice = expectedTotalPrice - (expectedTotalPrice * discountPercent) / 100;
 
-    await expect(page.locator('#badge-number')).toHaveText('5');
+    await expect(page.locator('#badge-number')).toHaveText(productsToAdd.length.toString());
 
     await page.locator('#shopping-cart-btn').click();
-    await expect(page.locator('#total-price')).toHaveText(`$${expectedTotalPrice}.00`);
+    await expect(page.locator('#total-price')).toHaveText(preparePriceForAssertion(expectedTotalPrice));
     const productsInCart = await getAllProductsInCartWithAmount(page);
     const productsInCartNames = getAllProductsInCartNames(productsInCart);
     expect(productsInCartNames).toEqual(productsToAdd);
     expect(validateProductAmounts(productsInCart), 'All products should have amount 1').toBeTruthy();
 
-    for (const promoCode of promoCodes) {
-      await page.locator('#rebate-input').fill(promoCode);
-      await page.locator('#apply-promocode-button').click();
-      await page.locator('#rebates-container').getByText(promoCode).waitFor({ state: 'visible', timeout: 5000 });
-    }
+    await applyPromocodes(promoCodes, page);
     const actualDiscountedPrice = (await page.locator('#total-price').innerText()).split('(')[0].trim();
-    expect(actualDiscountedPrice).toBe(`$${expectedDiscountedPrice}`);
+    expect(actualDiscountedPrice).toBe(preparePriceForAssertion(expectedDiscountedPrice));
 
     await page.locator('#continue-to-checkout-button').click();
-    await expect(page.locator('.text-muted')).toHaveText(`$${expectedDiscountedPrice}`);
+    await expect(page.locator('.text-muted')).toHaveText(preparePriceForAssertion(expectedDiscountedPrice));
   });
 });
 
@@ -99,4 +95,16 @@ function getAllProductsInCartNames(products: ProductInCart[]): string[] {
 
 function validateProductAmounts(products: ProductInCart[]): boolean {
   return products.every((product) => product.amount === '1');
+}
+
+function preparePriceForAssertion(price: number): string {
+  return `$${price.toFixed(2)}`;
+}
+
+async function applyPromocodes(promoCodes: string[], page: Page) {
+  for (const promoCode of promoCodes) {
+    await page.locator('#rebate-input').fill(promoCode);
+    await page.locator('#apply-promocode-button').click();
+    await page.locator('#rebates-container').getByText(promoCode).waitFor({ state: 'visible', timeout: 5000 });
+  }
 }
