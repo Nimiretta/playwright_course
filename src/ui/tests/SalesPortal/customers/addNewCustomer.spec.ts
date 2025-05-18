@@ -1,4 +1,5 @@
 import test, { expect } from '@playwright/test';
+import { SALES_PORTAL_URL, USER_LOGIN, USER_PASSWORD } from 'config/environment';
 import { NOTIFICATIONS } from 'data';
 import { generateCustomerData } from 'data/customers';
 import { AddNewCustomerPage, CustomersPage, SignInPage, HomePage } from 'ui/pages';
@@ -10,8 +11,8 @@ test.describe('[UI] [Sales Portal] [Customers]', () => {
     const customersPage = new CustomersPage(page);
     const addNewCustomerPage = new AddNewCustomerPage(page);
 
-    await page.goto('https://anatoly-karpovich.github.io/aqa-course-project/#');
-    await signInPage.fillCredentials('nimiretta', 'Test!123');
+    await page.goto(SALES_PORTAL_URL);
+    await signInPage.fillCredentials(USER_LOGIN, USER_PASSWORD);
     await signInPage.clickLogin();
 
     await homePage.waitForOpened();
@@ -25,11 +26,11 @@ test.describe('[UI] [Sales Portal] [Customers]', () => {
     await customersPage.waitForOpened();
     await customersPage.waitForNotification(NOTIFICATIONS.CUSTOMER_CREATED);
 
-    const actualCustomer = (await customersPage.parseCustomersTable())[0];
+    const actualCustomer = (await customersPage.getTableData())[0];
     const expectedCustomer = {
-      Email: data.email,
-      Name: data.name,
-      Country: data.country,
+      email: data.email,
+      name: data.name,
+      country: data.country,
     };
     expect(actualCustomer).toMatchObject(expectedCustomer);
   });
