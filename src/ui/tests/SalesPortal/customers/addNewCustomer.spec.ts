@@ -2,7 +2,7 @@ import test, { expect } from '@playwright/test';
 import { SALES_PORTAL_URL, USER_LOGIN, USER_PASSWORD } from 'config/environment';
 import { NOTIFICATIONS } from 'data';
 import { generateCustomerData } from 'data/customers';
-import { AddNewCustomerPage, CustomersPage, SignInPage, HomePage } from 'ui/pages';
+import { AddNewCustomerPage, CustomersPage, SignInPage, HomePage, SideMenuComponent } from 'ui/pages';
 
 test.describe('[UI] [Sales Portal] [Customers]', () => {
   test('Should create customer with valid data', async ({ page }) => {
@@ -10,13 +10,14 @@ test.describe('[UI] [Sales Portal] [Customers]', () => {
     const homePage = new HomePage(page);
     const customersPage = new CustomersPage(page);
     const addNewCustomerPage = new AddNewCustomerPage(page);
+    const sideMenu = new SideMenuComponent(page);
 
     await page.goto(SALES_PORTAL_URL);
-    await signInPage.fillCredentials(USER_LOGIN, USER_PASSWORD);
+    await signInPage.fillCredentials({ email: USER_LOGIN, password: USER_PASSWORD });
     await signInPage.clickLogin();
 
     await homePage.waitForOpened();
-    await homePage.clickModuleButton('Customers');
+    await sideMenu.clickMenuItem('Customers');
     await customersPage.waitForOpened();
     await customersPage.clickAddNewCustomer();
     await addNewCustomerPage.waitForOpened();

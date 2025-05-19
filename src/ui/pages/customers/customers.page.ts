@@ -4,18 +4,26 @@ import { DeleteCustomerModal, FilterModal } from '../modals';
 import { COUNTRIES } from 'data/customers';
 
 export class CustomersPage extends SalesPortalPage {
+  // Modals
   readonly filterModal = new FilterModal(this.page);
   readonly deleteModal = new DeleteCustomerModal(this.page);
 
+  // Header menu
   readonly addNewCustomerButton = this.page.getByRole('button', { name: 'Add Customer' });
   readonly filterButton = this.page.getByRole('button', { name: 'Filter' });
+  readonly searchInput = this.page.locator('input[type="search"]');
+  readonly searchButton = this.page.locator('#search-customer');
+  readonly chipButton = this.page.locator('.chip');
+  readonly searchChipButton = this.page.locator('div[data-chip-customers="search"]');
 
+  // Table headers
   readonly tableHeader = this.page.locator('#table-customers th div');
   readonly emailHeader = this.tableHeader.filter({ hasText: 'Email' });
   readonly nameHeader = this.tableHeader.filter({ hasText: 'Name' });
   readonly countryHeader = this.tableHeader.filter({ hasText: 'Country' });
   readonly createdOnHeader = this.tableHeader.filter({ hasText: 'Created On' });
 
+  // Table Body
   readonly tableRow = this.page.locator('#table-customers tbody tr');
   readonly tableRowByEmail = (email: string) => this.tableRow.filter({ has: this.page.getByText(email) });
 
@@ -26,6 +34,7 @@ export class CustomersPage extends SalesPortalPage {
   readonly editButton = (email: string) => this.tableRowByEmail(email).getByTitle('Edit');
   readonly detailsButton = (email: string) => this.tableRowByEmail(email).getByTitle('Details');
   readonly deleteButton = (email: string) => this.tableRowByEmail(email).getByTitle('Delete');
+  readonly emptyTableRow = this.page.locator('td.fs-italic');
 
   readonly uniqueElement = this.addNewCustomerButton;
 
@@ -77,6 +86,20 @@ export class CustomersPage extends SalesPortalPage {
 
   async isCustomerInTable(customerEmail: string): Promise<boolean> {
     return (await this.tableRowByEmail(customerEmail).count()) > 0;
+  }
+
+  async fillSearch(value: string | number) {
+    await this.searchInput.fill(String(value));
+  }
+
+  async clickSearch() {
+    await this.searchButton.click();
+  }
+
+  async search(value: string | number) {
+    await this.fillSearch(value);
+    await this.clickSearch();
+    await this.waitForOpened();
   }
 
   // async parseCustomersTable(): Promise<ICustomerTableRow[]> {

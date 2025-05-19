@@ -1,3 +1,4 @@
+import { ICredentials } from 'types';
 import { SalesPortalPage } from './salesPortal.page';
 
 export class SignInPage extends SalesPortalPage {
@@ -14,7 +15,7 @@ export class SignInPage extends SalesPortalPage {
     await this.passwordInput.fill(password);
   }
 
-  async fillCredentials(email: string, password: string) {
+  async fillCredentials({ email, password }: ICredentials) {
     await this.fillEmail(email);
     await this.fillPassword(password);
   }
