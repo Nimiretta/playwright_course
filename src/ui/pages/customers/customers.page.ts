@@ -1,10 +1,11 @@
 import { ICustomerInTable } from 'types';
 import { SalesPortalPage } from '../salesPortal.page';
-import { FilterModal } from '../modals';
+import { DeleteCustomerModal, FilterModal } from '../modals';
 import { COUNTRIES } from 'data/customers';
 
 export class CustomersPage extends SalesPortalPage {
   readonly filterModal = new FilterModal(this.page);
+  readonly deleteModal = new DeleteCustomerModal(this.page);
 
   readonly addNewCustomerButton = this.page.getByRole('button', { name: 'Add Customer' });
   readonly filterButton = this.page.getByRole('button', { name: 'Filter' });
@@ -47,24 +48,6 @@ export class CustomersPage extends SalesPortalPage {
   }
 
   async getCustomerData(customerEmail: string): Promise<ICustomerInTable> {
-    //variant 1
-    // return {
-    //   email: await this.emailCell(email).textContent(),
-    //   name: await this.nameCell(email).textContent(),
-    //   country: await this.countryCell(email).textContent(),
-    //   createdOn: await this.createdOnCell(email).textContent(),
-    // };
-
-    //variant 2
-    // const [email, name, country, createdOn] = await Promise.all([
-    //   this.emailCell(customerEmail).textContent(),
-    //   this.nameCell(customerEmail).textContent(),
-    //   this.countryCell(customerEmail).textContent(),
-    //   this.createdOnCell(customerEmail).textContent(),
-    // ]);
-    // return { email, name, country, createdOn };
-
-    //variant 3
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [email, name, country, createdOn] = await this.tableRowByEmail(customerEmail).locator('td').allInnerTexts();
     return {
@@ -90,6 +73,10 @@ export class CustomersPage extends SalesPortalPage {
       });
     }
     return tableData;
+  }
+
+  async isCustomerInTable(customerEmail: string): Promise<boolean> {
+    return (await this.tableRowByEmail(customerEmail).count()) > 0;
   }
 
   // async parseCustomersTable(): Promise<ICustomerTableRow[]> {
