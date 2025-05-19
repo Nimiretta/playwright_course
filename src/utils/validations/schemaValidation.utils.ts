@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import Ajv from 'ajv';
 
-export function validateSChema(expectedSchema: object, body: object) {
+export function validateSchema(expectedSchema: object, body: object) {
   const ajv = new Ajv();
   const validate = ajv.compile(expectedSchema);
 
