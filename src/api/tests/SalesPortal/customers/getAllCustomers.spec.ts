@@ -1,56 +1,34 @@
-import test, { expect } from '@playwright/test';
-import { apiConfig, USER_LOGIN, USER_PASSWORD } from 'config';
+import { test, expect } from 'fixtures';
+import { USER_LOGIN, USER_PASSWORD } from 'config';
 import { STATUS_CODES } from 'data';
 import { generateCustomerData } from 'data/customers';
 import { allCustomersSchema } from 'data/schemas';
 import { ICustomerFromResponse } from 'types';
-import { validateSchema } from 'utils/validations';
+import { validateResponse, validateSchema } from 'utils/validations';
 
 test.describe('[API] [Sales Portal] [Customers]', () => {
-  test('Should get all customers w/o filters', async ({ request }) => {
-    const loginResponse = await request.post(apiConfig.BASE_URL + apiConfig.ENDPOINTS.LOGIN, {
-      data: { username: USER_LOGIN, password: USER_PASSWORD },
-      headers: {
-        'content-type': 'application/json',
-      },
-    });
+  test('Should get all customers w/o filters', async ({ signInController, customersController }) => {
+    const loginResponse = await signInController.login({ username: USER_LOGIN, password: USER_PASSWORD });
 
-    const token = loginResponse.headers()['authorization'];
+    const token = loginResponse.headers['authorization'];
 
     const customerData = generateCustomerData();
-    const customerResponse = await request.post(apiConfig.BASE_URL + apiConfig.ENDPOINTS.CUSTOMERS, {
-      data: customerData,
-      headers: {
-        'content-type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const customerBody = await customerResponse.json();
+    const customerResponse = await customersController.create(customerData, token);
+    const customerBody = customerResponse.body;
     const customerId = customerBody.Customer._id;
-    expect(customerResponse.status()).toBe(STATUS_CODES.CREATED);
+    expect(customerResponse.status).toBe(STATUS_CODES.CREATED);
 
-    const allCustomersResponse = await request.get(apiConfig.BASE_URL + apiConfig.ENDPOINTS.CUSTOMERS, {
-      headers: {
-        'content-type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const allCustomersBody = await allCustomersResponse.json();
+    const allCustomersResponse = await customersController.getAll(token);
+    const allCustomersBody = allCustomersResponse.body;
     const customerFromResponse = allCustomersBody.Customers.find(
       (customer: ICustomerFromResponse) => customer._id === customerId,
     );
 
     validateSchema(allCustomersSchema, allCustomersBody);
-    expect.soft(allCustomersResponse.status()).toBe(STATUS_CODES.OK);
+    validateResponse(allCustomersResponse, STATUS_CODES.OK, true, null);
     expect.soft(customerFromResponse).toBeDefined();
-    expect.soft(allCustomersBody.ErrorMessage).toBe(null);
-    expect.soft(allCustomersBody.IsSuccess).toBe(true);
 
-    const response = await request.delete(apiConfig.BASE_URL + apiConfig.ENDPOINTS.CUSTOMER_BY_ID(customerId), {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    expect.soft(response.status()).toBe(STATUS_CODES.DELETED);
+    const response = await customersController.delete(customerId, token);
+    expect.soft(response.status).toBe(STATUS_CODES.DELETED);
   });
 });
