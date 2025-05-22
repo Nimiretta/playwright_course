@@ -28,7 +28,10 @@ export const test = base.extend<IBusinessSteps>({
       await addNewCustomerPage.fillInputs(data);
       await addNewCustomerPage.clickSaveNewCustomer();
       await customersPage.waitForOpened();
-      expect(await customersPage.isCustomerInTable(data.email), 'Created customer should be in table').toBeTruthy();
+      expect(
+        await customersPage.isCustomerInTable(data.email),
+        'Created customer is not present in table',
+      ).toBeTruthy();
       return data;
     });
   },
