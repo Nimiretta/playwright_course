@@ -12,9 +12,11 @@ export interface ICustomer {
   notes?: string;
 }
 
-export interface ICustomerTableRow {
-  Email: string;
-  Name: string;
-  Country: COUNTRIES;
-  'Created On': string;
-}
+// export interface ICustomerTableRow {
+//   Email: string;
+//   Name: string;
+//   Country: COUNTRIES;
+//   'Created On': string;
+// }
+
+export type ICustomerInTable = Pick<ICustomer, 'email' | 'country' | 'name'>;
