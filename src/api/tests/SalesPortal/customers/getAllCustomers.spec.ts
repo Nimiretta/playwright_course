@@ -42,7 +42,7 @@ test.describe('[API] [Sales Portal] [Customers]', () => {
 
     validateSchema(allCustomersSchema, allCustomersBody);
     expect.soft(allCustomersResponse.status()).toBe(STATUS_CODES.OK);
-    expect.soft(customerFromResponse).toBeDefined();
+    expect.soft(customerFromResponse).toEqual(customerBody.Customer);
     expect.soft(allCustomersBody.ErrorMessage).toBe(null);
     expect.soft(allCustomersBody.IsSuccess).toBe(true);
 
