@@ -1,10 +1,12 @@
 import { Modal } from './modal.page';
 
 export class FilterModal extends Modal {
-  readonly applyButton = this.uniqueElement.getByRole('button', { name: 'Apply' });
-  readonly clearFiltersButton = this.uniqueElement.getByRole('button', { name: 'Clear Filters' });
+  readonly applyButton = this.modalContainer.getByRole('button', { name: 'Apply' });
+  readonly clearFiltersButton = this.modalContainer.getByRole('button', { name: 'Clear Filters' });
 
-  readonly checkbox = (name: string) => this.uniqueElement.locator(`input[value="${name}"]`);
+  readonly checkbox = (name: string) => this.modalContainer.locator(`input[value="${name}"]`);
+
+  readonly uniqueElement = this.clearFiltersButton;
 
   async checkFilters(...value: string[]) {
     for (const v of value) {

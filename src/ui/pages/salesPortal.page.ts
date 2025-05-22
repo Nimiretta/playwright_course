@@ -1,4 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test';
+import { SALES_PORTAL_URL } from 'config/environment';
 
 export abstract class SalesPortalPage {
   readonly spinner: Locator;
@@ -21,5 +22,9 @@ export abstract class SalesPortalPage {
 
   async waitForNotification(text: string) {
     await expect(this.notification.last()).toHaveText(text);
+  }
+
+  async openPortal() {
+    this.page.goto(SALES_PORTAL_URL);
   }
 }
