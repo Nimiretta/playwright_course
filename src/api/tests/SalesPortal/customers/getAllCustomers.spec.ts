@@ -26,7 +26,7 @@ test.describe('[API] [Sales Portal] [Customers]', () => {
 
     validateSchema(allCustomersSchema, allCustomersBody);
     validateResponse(allCustomersResponse, STATUS_CODES.OK, true, null);
-    expect.soft(customerFromResponse).toBeDefined();
+    expect.soft(customerFromResponse).toEqual(customerBody.Customer);
 
     const response = await customersController.delete(customerId, token);
     expect.soft(response.status).toBe(STATUS_CODES.DELETED);
