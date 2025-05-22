@@ -9,6 +9,6 @@ test.describe('[UI] [Sales Portal] [Customers]', () => {
     await customersPage.deleteModal.clickYesDelete();
     await customersPage.deleteModal.waitForClosed();
     await customersPage.waitForOpened();
-    expect(await customersPage.isCustomerInTable(createdCustomer.email), "Customer shouldn't be in table").toBeFalsy();
+    expect(await customersPage.isCustomerInTable(createdCustomer.email), 'Customer is present in table').toBeFalsy();
   });
 });
