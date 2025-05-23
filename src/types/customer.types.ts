@@ -30,6 +30,14 @@ export interface ICustomersResponse extends IResponseFields {
   };
 }
 
+export interface ITopCustomer {
+  _id: string;
+  customerName: string;
+  customerEmail: string;
+  totalSpent: number;
+  ordersCount: number;
+}
+
 // export interface ICustomerTableRow {
 //   Email: string;
 //   Name: string;
