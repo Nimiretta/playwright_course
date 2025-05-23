@@ -1,4 +1,4 @@
-import { ICustomerInTable } from 'types';
+import { customersSortField, ICustomerInTable } from 'types';
 import { SalesPortalPage } from '../salesPortal.page';
 import { DeleteCustomerModal, FilterModal } from '../modals';
 import { COUNTRIES } from 'data/customers';
@@ -15,6 +15,9 @@ export class CustomersPage extends SalesPortalPage {
   readonly searchButton = this.page.locator('#search-customer');
   readonly chipButton = this.page.locator('.chip');
   readonly searchChipButton = this.page.locator('div[data-chip-customers="search"]');
+
+  // Table
+  readonly table = this.page.locator('#table-customers');
 
   // Table headers
   readonly tableHeader = this.page.locator('#table-customers th div');
@@ -37,6 +40,12 @@ export class CustomersPage extends SalesPortalPage {
   readonly emptyTableRow = this.page.locator('td.fs-italic');
 
   readonly uniqueElement = this.addNewCustomerButton;
+
+  async open() {
+    await this.page.evaluate(async () => {
+      await (window as typeof window & { renderCustomersPage: () => Promise<void> }).renderCustomersPage();
+    });
+  }
 
   async clickAddNewCustomer() {
     await this.addNewCustomerButton.click();
@@ -100,6 +109,23 @@ export class CustomersPage extends SalesPortalPage {
     await this.fillSearch(value);
     await this.clickSearch();
     await this.waitForOpened();
+  }
+
+  async clickTableHeader(header: customersSortField) {
+    switch (header) {
+      case 'email':
+        await this.emailHeader.click();
+        break;
+      case 'name':
+        await this.nameHeader.click();
+        break;
+      case 'country':
+        await this.countryHeader.click();
+        break;
+      case 'createdOn':
+        await this.createdOnHeader.click();
+        break;
+    }
   }
 
   // async parseCustomersTable(): Promise<ICustomerTableRow[]> {
