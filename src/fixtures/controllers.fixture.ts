@@ -1,9 +1,10 @@
 import { test as base } from './businessSteps.fixture';
-import { CustomersController, SignInController } from 'api/controllers';
+import { CustomersController, ProductsController, SignInController } from 'api/controllers';
 
 interface ISalesPortalControllers {
   customersController: CustomersController;
   signInController: SignInController;
+  productsController: ProductsController;
 }
 
 export const test = base.extend<ISalesPortalControllers>({
@@ -12,6 +13,9 @@ export const test = base.extend<ISalesPortalControllers>({
   },
   signInController: async ({ request }, use) => {
     await use(new SignInController(request));
+  },
+  productsController: async ({ request }, use) => {
+    await use(new ProductsController(request));
   },
 });
 

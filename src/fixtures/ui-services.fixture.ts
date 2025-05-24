@@ -1,12 +1,22 @@
-import { CustomersUIService, EditCustomerUiService, HomeUIService, SignInUIService } from 'ui/services';
+import {
+  AddNewCustomerUIService,
+  AddNewProductUIService,
+  CustomersUIService,
+  EditCustomerUiService,
+  HomeUIService,
+  ProductsUIService,
+  SignInUIService,
+} from 'ui/services';
 import { test as base } from './api-services.fixture';
 
 interface IUIServices {
   homeUIService: HomeUIService;
   signInUIService: SignInUIService;
   customersUIService: CustomersUIService;
-  addNewCustomerUIService: CustomersUIService;
+  addNewCustomerUIService: AddNewCustomerUIService;
   editCustomerUIService: EditCustomerUiService;
+  productsUIService: ProductsUIService;
+  addNewProductUIService: AddNewProductUIService;
 }
 
 export const test = base.extend<IUIServices>({
@@ -20,10 +30,16 @@ export const test = base.extend<IUIServices>({
     await use(new CustomersUIService(page));
   },
   addNewCustomerUIService: async ({ page }, use) => {
-    await use(new CustomersUIService(page));
+    await use(new AddNewCustomerUIService(page));
   },
   editCustomerUIService: async ({ page }, use) => {
     await use(new EditCustomerUiService(page));
+  },
+  productsUIService: async ({ page }, use) => {
+    await use(new ProductsUIService(page));
+  },
+  addNewProductUIService: async ({ page }, use) => {
+    await use(new AddNewProductUIService(page));
   },
 });
 
