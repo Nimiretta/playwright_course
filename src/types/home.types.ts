@@ -1,3 +1,5 @@
+import { MAIN_METRICS } from 'data/home';
+
 export type ModuleName = 'Customers' | 'Products' | 'Orders';
 
 export interface IMainMetricsValues {
@@ -7,3 +9,11 @@ export interface IMainMetricsValues {
   totalRevenue: string;
   avgOrderValue: string;
 }
+
+export type MetricTypeMap = {
+  [MAIN_METRICS.OrdersThisYear]: number;
+  [MAIN_METRICS.NewCustomers]: number;
+  [MAIN_METRICS.CanceledOrders]: number;
+  [MAIN_METRICS.TotalRevenue]: string;
+  [MAIN_METRICS.AvgOrderValue]: string;
+};

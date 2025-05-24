@@ -1,4 +1,4 @@
-import { IMainMetricsValues } from 'types';
+import { IMainMetricsValues, MetricTypeMap } from 'types';
 import { SalesPortalPage } from './salesPortal.page';
 import { MAIN_METRICS } from 'data/home';
 
@@ -15,36 +15,42 @@ export class HomePage extends SalesPortalPage {
 
   async getMainMetricsValues(): Promise<IMainMetricsValues> {
     const [ordersThisYear, newCustomers, canceledOrders, totalRevenue, avgOrderValue] = await Promise.all([
-      this.ordersThisYear.innerText(),
-      this.newCustomers.innerText(),
-      this.canceledOrders.innerText(),
-      this.totalRevenue.innerText(),
-      this.avgOrderValue.innerText(),
+      this.getMetricsValueByName(MAIN_METRICS.OrdersThisYear),
+      this.getMetricsValueByName(MAIN_METRICS.NewCustomers),
+      this.getMetricsValueByName(MAIN_METRICS.CanceledOrders),
+      this.getMetricsValueByName(MAIN_METRICS.TotalRevenue),
+      this.getMetricsValueByName(MAIN_METRICS.AvgOrderValue),
     ]);
     return {
-      ordersThisYear: +ordersThisYear,
-      newCustomers: +newCustomers,
-      canceledOrders: +canceledOrders,
+      ordersThisYear,
+      newCustomers,
+      canceledOrders,
       totalRevenue,
       avgOrderValue,
     };
   }
 
-  async getMetricsValueByName(name: MAIN_METRICS) {
-    const metrics = await this.getMainMetricsValues();
+  async getMetricsValueByName<T extends keyof MetricTypeMap>(name: T): Promise<MetricTypeMap[T]> {
+    let value;
     switch (name) {
       case MAIN_METRICS.OrdersThisYear:
-        return metrics.ordersThisYear;
+        value = +(await this.ordersThisYear.innerText());
+        break;
       case MAIN_METRICS.NewCustomers:
-        return metrics.newCustomers;
+        value = +(await this.newCustomers.innerText());
+        break;
       case MAIN_METRICS.CanceledOrders:
-        return metrics.canceledOrders;
+        value = +(await this.canceledOrders.innerText());
+        break;
       case MAIN_METRICS.TotalRevenue:
-        return metrics.totalRevenue;
+        value = await this.totalRevenue.innerText();
+        break;
       case MAIN_METRICS.AvgOrderValue:
-        return metrics.avgOrderValue;
+        value = await this.avgOrderValue.innerText();
+        break;
       default:
         throw new Error(`Unknown metric name: ${name}`);
     }
+    return value as MetricTypeMap[T];
   }
 }
