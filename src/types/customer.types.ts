@@ -1,5 +1,5 @@
 import { COUNTRIES } from 'data/customers';
-import { IResponseFields } from './api.types';
+import { IResponseFields, sortDirection, customersSortField } from './api.types';
 
 export interface ICustomer {
   email: string;
@@ -24,6 +24,18 @@ export interface ICustomerResponse extends IResponseFields {
 
 export interface ICustomersResponse extends IResponseFields {
   Customers: ICustomerFromResponse[];
+  sorting: {
+    sortField: customersSortField;
+    sortOrder: sortDirection;
+  };
+}
+
+export interface ITopCustomer {
+  _id: string;
+  customerName: string;
+  customerEmail: string;
+  totalSpent: number;
+  ordersCount: number;
 }
 
 // export interface ICustomerTableRow {
