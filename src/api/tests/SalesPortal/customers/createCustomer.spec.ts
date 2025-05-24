@@ -8,6 +8,9 @@ import _ from 'lodash';
 import { ICustomer } from 'types';
 import { validateResponse, validateSchema } from 'utils/validations';
 
+const getStringAlpha = strGenerator('alpha');
+const getStringAlphanumeric = strGenerator('alphanumeric');
+const getStringNumeric = strGenerator('numeric');
 interface ICreateCustomerTestData {
   testName: string;
   customer: Partial<ICustomer>;
@@ -22,37 +25,28 @@ const customerValidTestData: ICreateCustomerTestData[] = [
       street: 'A',
       house: 1,
       flat: 1,
-      phone: `+${faker.string.numeric(10)}`,
+      phone: `+${getStringNumeric({ length: 10 })}`,
       notes: '',
     },
   },
   {
     testName: 'Should create customer with the longest valid data',
     customer: {
-      name: faker.string.alpha({ length: 40, exclude: [' '] }),
-      city: faker.string.alpha({ length: 20, exclude: [' '] }),
-      street: faker.string.alphanumeric({ length: 40, exclude: [' '] }),
+      name: getStringAlpha({ length: 40 }),
+      city: getStringAlpha({ length: 20 }),
+      street: getStringAlphanumeric({ length: 40 }),
       house: 999,
       flat: 9999,
-      phone: `+${faker.string.numeric(20)}`,
-      notes: faker.string.alphanumeric(250),
+      phone: `+${getStringNumeric({ length: 20 })}`,
+      notes: getStringAlphanumeric({ length: 250 }),
     },
   },
   {
     testName: 'Should create customer with valid data included spaces',
     customer: {
-      name:
-        faker.string.alpha({ length: { min: 1, max: 19 }, exclude: [' '] }) +
-        ' ' +
-        faker.string.alpha({ length: { min: 1, max: 19 }, exclude: [' '] }),
-      city:
-        faker.string.alpha({ length: { min: 1, max: 9 }, exclude: [' '] }) +
-        ' ' +
-        faker.string.alpha({ length: { min: 1, max: 9 }, exclude: [' '] }),
-      street:
-        faker.string.alpha({ length: { min: 1, max: 30 }, exclude: [' '] }) +
-        ' ' +
-        faker.string.numeric({ length: { min: 1, max: 9 }, exclude: [' '] }),
+      name: `${getStringAlpha({ min: 1, max: 19 })} ${getStringAlpha({ min: 1, max: 19 })}`,
+      city: `${getStringAlpha({ min: 1, max: 9 })} ${getStringAlpha({ min: 1, max: 9 })}`,
+      street: `${getStringAlpha({ min: 1, max: 30 })} ${getStringNumeric({ min: 1, max: 9 })}`,
     },
   },
 ];
@@ -134,7 +128,7 @@ const customerInvalidTestData: ICustomerInvalidTestData[] = [
   {
     testName: 'Should not create customer with name > 40 symbols',
     customer: {
-      name: faker.string.alpha({ length: 41, exclude: [' '] }),
+      name: getStringAlpha({ length: 41 }),
     },
     statusCode: STATUS_CODES.BAD_REQUEST,
     errorMessage: 'Incorrect request body',
@@ -142,10 +136,7 @@ const customerInvalidTestData: ICustomerInvalidTestData[] = [
   {
     testName: 'Should not create customer with name included 2 spaces between words',
     customer: {
-      name:
-        faker.string.alpha({ length: { min: 1, max: 19 }, exclude: [' '] }) +
-        '  ' +
-        faker.string.alpha({ length: { min: 1, max: 19 }, exclude: [' '] }),
+      name: `${getStringAlpha({ min: 1, max: 19 })}  ${getStringAlpha({ min: 1, max: 19 })}`,
     },
     statusCode: STATUS_CODES.BAD_REQUEST,
     errorMessage: 'Incorrect request body',
@@ -177,7 +168,7 @@ const customerInvalidTestData: ICustomerInvalidTestData[] = [
   {
     testName: 'Should not create customer with city > 20 symbols',
     customer: {
-      city: faker.string.alpha({ length: 21, exclude: [' '] }),
+      city: getStringAlpha({ length: 21 }),
     },
     statusCode: STATUS_CODES.BAD_REQUEST,
     errorMessage: 'Incorrect request body',
@@ -185,10 +176,7 @@ const customerInvalidTestData: ICustomerInvalidTestData[] = [
   {
     testName: 'Should not create customer with city included 2 spaces between words',
     customer: {
-      city:
-        faker.string.alpha({ length: { min: 1, max: 9 }, exclude: [' '] }) +
-        '  ' +
-        faker.string.alpha({ length: { min: 1, max: 9 }, exclude: [' '] }),
+      city: `${getStringAlpha({ min: 1, max: 9 })}  ${getStringAlpha({ min: 1, max: 9 })}`,
     },
     statusCode: STATUS_CODES.BAD_REQUEST,
     errorMessage: 'Incorrect request body',
@@ -204,7 +192,7 @@ const customerInvalidTestData: ICustomerInvalidTestData[] = [
   {
     testName: 'Should not create customer with street > 40 symbols',
     customer: {
-      street: faker.string.alphanumeric({ length: 41, exclude: [' '] }),
+      street: getStringAlphanumeric({ length: 41 }),
     },
     statusCode: STATUS_CODES.BAD_REQUEST,
     errorMessage: 'Incorrect request body',
@@ -212,10 +200,7 @@ const customerInvalidTestData: ICustomerInvalidTestData[] = [
   {
     testName: 'Should not create customer with street included 2 spaces between words',
     customer: {
-      street:
-        faker.string.alpha({ length: { min: 1, max: 29 }, exclude: [' '] }) +
-        '  ' +
-        faker.string.numeric({ length: { min: 1, max: 9 }, exclude: [' '] }),
+      street: `${getStringAlpha({ min: 1, max: 29 })}  ${getStringNumeric({ min: 1, max: 9 })}`,
     },
     statusCode: STATUS_CODES.BAD_REQUEST,
     errorMessage: 'Incorrect request body',
@@ -295,7 +280,7 @@ const customerInvalidTestData: ICustomerInvalidTestData[] = [
   {
     testName: 'Should not create customer with phone < 10 numbers',
     customer: {
-      phone: `+${faker.string.numeric(9)}`,
+      phone: `+${getStringNumeric({ length: 9 })}`,
     },
     statusCode: STATUS_CODES.BAD_REQUEST,
     errorMessage: 'Incorrect request body',
@@ -303,7 +288,7 @@ const customerInvalidTestData: ICustomerInvalidTestData[] = [
   {
     testName: 'Should not create customer with phone > 20 numbers',
     customer: {
-      phone: `+${faker.string.numeric(21)}`,
+      phone: `+${getStringNumeric({ length: 21 })}`,
     },
     statusCode: STATUS_CODES.BAD_REQUEST,
     errorMessage: 'Incorrect request body',
@@ -311,7 +296,7 @@ const customerInvalidTestData: ICustomerInvalidTestData[] = [
   {
     testName: 'Should not create customer with phone includes letters',
     customer: {
-      phone: `+${faker.string.numeric(14)}ab`,
+      phone: `+${getStringNumeric({ length: 14 })}ab`,
     },
     statusCode: STATUS_CODES.BAD_REQUEST,
     errorMessage: 'Incorrect request body',
@@ -319,7 +304,7 @@ const customerInvalidTestData: ICustomerInvalidTestData[] = [
   {
     testName: 'Should not create customer with notes > 250 symbols',
     customer: {
-      notes: faker.string.alphanumeric(251),
+      notes: getStringAlphanumeric({ length: 251 }),
     },
     statusCode: STATUS_CODES.BAD_REQUEST,
     errorMessage: 'Incorrect request body',
@@ -327,7 +312,7 @@ const customerInvalidTestData: ICustomerInvalidTestData[] = [
   {
     testName: 'Should not create customer with notes includes symbol ">"',
     customer: {
-      notes: faker.string.alphanumeric(150) + '>',
+      notes: getStringAlphanumeric({ length: 150 }) + '>',
     },
     statusCode: STATUS_CODES.BAD_REQUEST,
     errorMessage: 'Incorrect request body',
@@ -335,7 +320,7 @@ const customerInvalidTestData: ICustomerInvalidTestData[] = [
   {
     testName: 'Should not create customer with notes includes symbol "<"',
     customer: {
-      notes: faker.string.alphanumeric(150) + '<',
+      notes: getStringAlphanumeric({ length: 150 }) + '<',
     },
     statusCode: STATUS_CODES.BAD_REQUEST,
     errorMessage: 'Incorrect request body',
@@ -373,3 +358,15 @@ test.describe('[API] [Sales Portal] [Customers] [Create] Negative scenarios', ()
     }
   });
 });
+
+type LengthParams = { length: number; min?: never; max?: never } | { min: number; max: number; length?: never };
+type StringGeneratorParams = LengthParams & { excludeSpace?: boolean };
+
+function strGenerator(method: 'alpha' | 'alphanumeric' | 'numeric') {
+  return ({ min, max, length, excludeSpace = true }: StringGeneratorParams) => {
+    return faker.string[method]({
+      length: length ? length : { min: min!, max: max! },
+      exclude: excludeSpace ? [' '] : [],
+    });
+  };
+}
