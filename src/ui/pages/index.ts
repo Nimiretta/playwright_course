@@ -6,3 +6,5 @@ export * from './home.page';
 export * from './sideMenu.page';
 export * from './customers/editCustomer.page';
 export * from './customers/customerDetails.page';
+export * from './products/products.page';
+export * from './products/addNewProduct.page';

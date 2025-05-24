@@ -1,9 +1,13 @@
-import { IMainMetricsValues, MetricTypeMap } from 'types';
+import { IMainMetricsValues, MetricTypeMap, ModuleName } from 'types';
 import { SalesPortalPage } from './salesPortal.page';
 import { MAIN_METRICS } from 'data/home';
+import { Locator } from '@playwright/test';
 
 export class HomePage extends SalesPortalPage {
   readonly title = this.page.locator('.welcome-text');
+  readonly customersButton = this.page.getByRole('link', { name: 'Customer' });
+  readonly productsButton = this.page.getByRole('link', { name: 'Products' });
+  readonly ordersButton = this.page.getByRole('link', { name: 'Orders' });
 
   readonly ordersThisYear = this.page.locator('#total-orders-container .card-text');
   readonly newCustomers = this.page.locator('#total-customers-container .card-text');
@@ -12,6 +16,16 @@ export class HomePage extends SalesPortalPage {
   readonly avgOrderValue = this.page.locator('#avg-orders-value-container .card-text');
 
   readonly uniqueElement = this.title;
+
+  async clickModuleButton(moduleName: ModuleName) {
+    const moduleButtons: Record<ModuleName, Locator> = {
+      Customers: this.customersButton,
+      Products: this.productsButton,
+      Orders: this.ordersButton,
+    };
+
+    await moduleButtons[moduleName].click();
+  }
 
   async getMainMetricsValues(): Promise<IMainMetricsValues> {
     const [ordersThisYear, newCustomers, canceledOrders, totalRevenue, avgOrderValue] = await Promise.all([
