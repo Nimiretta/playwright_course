@@ -1,1 +1,1 @@
-export * from './mock.fixture';
+export * from './ui-services.fixture';
