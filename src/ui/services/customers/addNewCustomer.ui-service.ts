@@ -1,18 +1,15 @@
-import { expect, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { apiConfig } from 'config';
 import { STATUS_CODES } from 'data';
 import { generateCustomerData } from 'data/customers';
 import _ from 'lodash';
 import { ICustomer, ICustomerResponse } from 'types';
 import { AddNewCustomerPage, CustomersPage } from 'ui/pages';
+import { PageHolder } from '../base.ui-service';
 
-export class AddNewCustomerUIService {
-  private addNewCustomerPage: AddNewCustomerPage;
-  private customersPage: CustomersPage;
-  constructor(private page: Page) {
-    this.addNewCustomerPage = new AddNewCustomerPage(page);
-    this.customersPage = new CustomersPage(page);
-  }
+export class AddNewCustomerUIService extends PageHolder {
+  private addNewCustomerPage = new AddNewCustomerPage(this.page);
+  private customersPage = new CustomersPage(this.page);
 
   async create(customData?: ICustomer) {
     const data = generateCustomerData(customData);

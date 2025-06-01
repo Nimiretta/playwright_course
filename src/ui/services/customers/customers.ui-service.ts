@@ -1,17 +1,11 @@
-import { Page } from '@playwright/test';
 import { CustomersPage, AddNewCustomerPage, EditCustomerPage, CustomerDetailsPage } from 'ui/pages';
+import { PageHolder } from '../base.ui-service';
 
-export class CustomersUIService {
-  private customersPage: CustomersPage;
-  private addNewCustomerPage: AddNewCustomerPage;
-  private editCustomerPage: EditCustomerPage;
-  private customerDetailsPage: CustomerDetailsPage;
-  constructor(private page: Page) {
-    this.customersPage = new CustomersPage(page);
-    this.addNewCustomerPage = new AddNewCustomerPage(page);
-    this.editCustomerPage = new EditCustomerPage(page);
-    this.customerDetailsPage = new CustomerDetailsPage(page);
-  }
+export class CustomersUIService extends PageHolder {
+  private customersPage = new CustomersPage(this.page);
+  private addNewCustomerPage = new AddNewCustomerPage(this.page);
+  private editCustomerPage = new EditCustomerPage(this.page);
+  private customerDetailsPage = new CustomerDetailsPage(this.page);
 
   async openAddPage() {
     await this.customersPage.clickAddNewCustomer();

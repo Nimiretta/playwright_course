@@ -1,16 +1,11 @@
-import { Page } from '@playwright/test';
 import { ModuleName } from 'types';
 import { HomePage, CustomersPage, ProductsPage } from 'ui/pages';
+import { PageHolder } from './base.ui-service';
 
-export class HomeUIService {
-  homePage: HomePage;
-  customersPage: CustomersPage;
-  productsPage: ProductsPage;
-  constructor(private page: Page) {
-    this.customersPage = new CustomersPage(page);
-    this.homePage = new HomePage(page);
-    this.productsPage = new ProductsPage(page);
-  }
+export class HomeUIService extends PageHolder {
+  private customersPage = new CustomersPage(this.page);
+  private homePage = new HomePage(this.page);
+  private productsPage = new ProductsPage(this.page);
 
   async openModule(moduleName: ModuleName) {
     await this.homePage.clickModuleButton(moduleName);

@@ -1,4 +1,3 @@
-import { Page } from '@playwright/test';
 import { apiConfig } from 'config';
 import { generateCustomerData } from 'data/customers';
 import { expect } from 'fixtures';
@@ -6,14 +5,11 @@ import { STATUS_CODES } from 'data';
 import _ from 'lodash';
 import { ICustomer, ICustomerResponse } from 'types';
 import { EditCustomerPage, CustomersPage } from 'ui/pages';
+import { PageHolder } from '../base.ui-service';
 
-export class EditCustomerUiService {
-  private editCustomerPage: EditCustomerPage;
-  private customersPage: CustomersPage;
-  constructor(private page: Page) {
-    this.editCustomerPage = new EditCustomerPage(page);
-    this.customersPage = new CustomersPage(page);
-  }
+export class EditCustomerUiService extends PageHolder {
+  private editCustomerPage = new EditCustomerPage(this.page);
+  private customersPage = new CustomersPage(this.page);
 
   async edit(customData?: ICustomer) {
     const data = generateCustomerData(customData);

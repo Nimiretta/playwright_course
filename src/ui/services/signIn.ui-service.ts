@@ -1,14 +1,10 @@
-import { Page } from '@playwright/test';
 import { USER_LOGIN, USER_PASSWORD } from 'config';
 import { SignInPage, HomePage } from 'ui/pages';
+import { PageHolder } from './base.ui-service';
 
-export class SignInUIService {
-  private signInPage: SignInPage;
-  private homePage: HomePage;
-  constructor(private page: Page) {
-    this.signInPage = new SignInPage(page);
-    this.homePage = new HomePage(page);
-  }
+export class SignInUIService extends PageHolder {
+  private signInPage = new SignInPage(this.page);
+  private homePage = new HomePage(this.page);
 
   async signInAsLocalUser() {
     await this.signInPage.openPortal();
