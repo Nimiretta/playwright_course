@@ -1,13 +1,9 @@
-import { Page } from '@playwright/test';
 import { AddNewProductPage, ProductsPage } from 'ui/pages';
+import { PageHolder } from '../base.ui-service';
 
-export class ProductsUIService {
-  private productsPage: ProductsPage;
-  private addNewProductPage: AddNewProductPage;
-  constructor(private page: Page) {
-    this.productsPage = new ProductsPage(page);
-    this.addNewProductPage = new AddNewProductPage(page);
-  }
+export class ProductsUIService extends PageHolder {
+  private productsPage = new ProductsPage(this.page);
+  private addNewProductPage = new AddNewProductPage(this.page);
 
   async openAddPage() {
     await this.productsPage.clickAddNewProduct();
