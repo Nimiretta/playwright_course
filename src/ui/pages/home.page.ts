@@ -2,6 +2,7 @@ import { IMainMetricsValues, MetricTypeMap, ModuleName } from 'types';
 import { SalesPortalPage } from './salesPortal.page';
 import { MAIN_METRICS } from 'data/home';
 import { Locator } from '@playwright/test';
+import { logStep } from 'utils';
 
 export class HomePage extends SalesPortalPage {
   readonly title = this.page.locator('.welcome-text');
@@ -17,6 +18,7 @@ export class HomePage extends SalesPortalPage {
 
   readonly uniqueElement = this.title;
 
+  @logStep('Click on Module button')
   async clickModuleButton(moduleName: ModuleName) {
     const moduleButtons: Record<ModuleName, Locator> = {
       Customers: this.customersButton,
