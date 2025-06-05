@@ -6,11 +6,13 @@ import _ from 'lodash';
 import { ICustomer, ICustomerResponse } from 'types';
 import { EditCustomerPage, CustomersPage } from 'ui/pages';
 import { PageHolder } from '../base.ui-service';
+import { logStep } from 'utils';
 
 export class EditCustomerUiService extends PageHolder {
   private editCustomerPage = new EditCustomerPage(this.page);
   private customersPage = new CustomersPage(this.page);
 
+  @logStep('Edit Customer via UI')
   async edit(customData?: ICustomer) {
     const data = generateCustomerData(customData);
     await this.editCustomerPage.fillInputs(data);

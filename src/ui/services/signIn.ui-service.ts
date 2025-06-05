@@ -1,11 +1,13 @@
 import { USER_LOGIN, USER_PASSWORD } from 'config';
 import { SignInPage, HomePage } from 'ui/pages';
 import { PageHolder } from './base.ui-service';
+import { logStep } from 'utils';
 
 export class SignInUIService extends PageHolder {
   private signInPage = new SignInPage(this.page);
   private homePage = new HomePage(this.page);
 
+  @logStep('Login via UI and get token')
   async signInAsLocalUser() {
     await this.signInPage.openPortal();
     await this.signInPage.fillCredentials({ username: USER_LOGIN, password: USER_PASSWORD });

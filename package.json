@@ -5,6 +5,7 @@
   "scripts": {
     "test:ui": "npx playwright test --project=sales-portal-ui",
     "test:api": "npx playwright test --project=sales-portal-api",
+    "update-snapshots": "npx playwright test --update-snapshots",
     "ui-mode": "npx playwright test --ui",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",

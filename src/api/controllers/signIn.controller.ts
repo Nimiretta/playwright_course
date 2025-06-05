@@ -2,6 +2,7 @@ import { RequestApi } from 'api/apiClients/request';
 import { APIRequestContext } from '@playwright/test';
 import { apiConfig } from 'config';
 import { ICredentials, ILoginResponse, IRequestOptions } from 'types';
+import { logStep } from 'utils';
 
 export class SignInController {
   private request: RequestApi;
@@ -10,6 +11,7 @@ export class SignInController {
     this.request = new RequestApi(context);
   }
 
+  @logStep('Send Login request')
   async login(body: ICredentials) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,

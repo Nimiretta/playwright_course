@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { USER_LOGIN, USER_PASSWORD } from 'config';
-import { STATUS_CODES } from 'data';
+import { STATUS_CODES, TAGS } from 'data';
 import { COUNTRIES, generateCustomerData } from 'data/customers';
 import { customerSchema, errorResponseSchema } from 'data/schemas';
 import { test, expect } from 'fixtures';
@@ -61,7 +61,7 @@ test.describe('[API] [Sales Portal] [Customers] [Create] Positive scenarios', ()
   });
 
   customerValidTestData.forEach(({ testName, customer }) => {
-    test(testName, async ({ customersController }) => {
+    test(testName, { tag: [TAGS.API, TAGS.REGRESSION] }, async ({ customersController }) => {
       const customerData = generateCustomerData(customer);
       const customerResponse = await customersController.create(customerData, token);
       id = customerResponse.body.Customer._id;
@@ -342,7 +342,7 @@ test.describe('[API] [Sales Portal] [Customers] [Create] Negative scenarios', ()
   });
 
   customerInvalidTestData.forEach(({ testName, customer, token: testToken, statusCode, errorMessage }) => {
-    test(testName, async ({ customersController }) => {
+    test(testName, { tag: [TAGS.API, TAGS.REGRESSION] }, async ({ customersController }) => {
       const customerData = generateCustomerData(customer);
       const customerResponse = await customersController.create(customerData, testToken ?? token);
 

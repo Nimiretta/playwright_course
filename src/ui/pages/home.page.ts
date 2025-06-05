@@ -29,6 +29,7 @@ export class HomePage extends SalesPortalPage {
     await moduleButtons[moduleName].click();
   }
 
+  @logStep('Get main metrics values')
   async getMainMetricsValues(): Promise<IMainMetricsValues> {
     const [ordersThisYear, newCustomers, canceledOrders, totalRevenue, avgOrderValue] = await Promise.all([
       this.getMetricsValueByName(MAIN_METRICS.OrdersThisYear),
@@ -46,6 +47,8 @@ export class HomePage extends SalesPortalPage {
     };
   }
 
+  // @ts-expect-error: TypeScript cannot infer the correct return type for logDecorator
+  @logStep('Get main metric value by name')
   async getMetricsValueByName<T extends keyof MetricTypeMap>(name: T): Promise<MetricTypeMap[T]> {
     let value;
     switch (name) {

@@ -1,3 +1,4 @@
+import { logStep } from 'utils';
 import { ProductDetailsModal } from '../modals';
 import { SalesPortalPage } from '../salesPortal.page';
 
@@ -12,10 +13,12 @@ export class ProductsPage extends SalesPortalPage {
 
   readonly uniqueElement = this.addNewProductButton;
 
+  @logStep('Click on Add New Product button')
   async clickAddNewProduct() {
     await this.addNewProductButton.click();
   }
 
+  @logStep('Click on Details button for product')
   async clickDetails(name: string) {
     await this.detailsButton(name).click();
     await this.detailsModal.waitForOpened();

@@ -12,7 +12,7 @@ export class CustomersController {
     this.request = new RequestApi(context);
   }
 
-  @logStep()
+  @logStep('Send Create Customer request')
   async create(body: ICustomer, token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
@@ -27,7 +27,7 @@ export class CustomersController {
     return await this.request.send<ICustomerResponse>(options);
   }
 
-  @logStep()
+  @logStep('Send Get Customer by ID request')
   async getById(id: string, token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
@@ -41,7 +41,7 @@ export class CustomersController {
     return await this.request.send<ICustomerResponse>(options);
   }
 
-  @logStep()
+  @logStep('Send Get All Customers request')
   async getAll(token: string, params?: Record<string, string>) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
@@ -55,7 +55,7 @@ export class CustomersController {
     return await this.request.send<ICustomersResponse>(options);
   }
 
-  @logStep()
+  @logStep('Send Update Customer request')
   async update(id: string, body: ICustomer, token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
@@ -70,7 +70,7 @@ export class CustomersController {
     return await this.request.send<ICustomerResponse>(options);
   }
 
-  @logStep()
+  @logStep('Send Delete Customer request')
   async delete(id: string, token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,

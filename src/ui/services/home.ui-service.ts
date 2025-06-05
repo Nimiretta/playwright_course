@@ -8,7 +8,7 @@ export class HomeUIService extends PageHolder {
   private homePage = new HomePage(this.page);
   private productsPage = new ProductsPage(this.page);
 
-  @logStep()
+  @logStep('Open Module')
   async openModule(moduleName: ModuleName) {
     await this.homePage.clickModuleButton(moduleName);
     switch (moduleName) {

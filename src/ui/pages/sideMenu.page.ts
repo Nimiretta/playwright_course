@@ -1,5 +1,6 @@
 import { Locator, Page } from '@playwright/test';
 import { SideMenuItem } from 'types';
+import { logStep } from 'utils';
 
 export class SideMenuComponent {
   readonly salesPortalButton: Locator;
@@ -14,14 +15,17 @@ export class SideMenuComponent {
 
   readonly menuItem = (itemName: SideMenuItem) => this.page.locator(`a[name="${itemName}"]`);
 
+  @logStep('Click on Side Menu item')
   async clickMenuItem(itemName: SideMenuItem) {
     await this.menuItem(itemName).click();
   }
 
+  @logStep('Click on logged in user button')
   async openUserDropdown() {
     await this.userDropdown.click();
   }
 
+  @logStep('Click on Sign Out button')
   async clickSignOut() {
     await this.signOutButton.click();
   }

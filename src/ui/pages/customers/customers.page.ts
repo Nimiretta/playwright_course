@@ -42,6 +42,7 @@ export class CustomersPage extends SalesPortalPage {
 
   readonly uniqueElement = this.addNewCustomerButton;
 
+  @logStep('Directly open Customers Page')
   async open() {
     await this.page.evaluate(async () => {
       await (window as typeof window & { renderCustomersPage: () => Promise<void> }).renderCustomersPage();
@@ -53,10 +54,12 @@ export class CustomersPage extends SalesPortalPage {
     await this.addNewCustomerButton.click();
   }
 
+  @logStep('Click on Filter button')
   async clickFilter() {
     await this.filterButton.click();
   }
 
+  @logStep(`Click on Customers table action`)
   async clickTableAction(customerEmail: string, action: 'edit' | 'details' | 'delete') {
     const buttons = {
       edit: this.editButton(customerEmail),
@@ -67,6 +70,7 @@ export class CustomersPage extends SalesPortalPage {
     await buttons[action].click();
   }
 
+  @logStep("Get Customer's data from table by email")
   async getCustomerData(customerEmail: string): Promise<ICustomerInTable> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [email, name, country, createdOn] = await this.tableRowByEmail(customerEmail).locator('td').allInnerTexts();
@@ -78,6 +82,7 @@ export class CustomersPage extends SalesPortalPage {
     };
   }
 
+  @logStep('Get Customers data from table')
   async getTableData() {
     const tableData: Array<ICustomerInTable> = [];
 
@@ -95,24 +100,29 @@ export class CustomersPage extends SalesPortalPage {
     return tableData;
   }
 
+  @logStep('Check if Customers is in table')
   async isCustomerInTable(customerEmail: string): Promise<boolean> {
     return (await this.tableRowByEmail(customerEmail).count()) > 0;
   }
 
+  @logStep('Fill Search input')
   async fillSearch(value: string | number) {
     await this.searchInput.fill(String(value));
   }
 
+  @logStep('Click on Search button')
   async clickSearch() {
     await this.searchButton.click();
   }
 
+  @logStep('Search for Customer by value')
   async search(value: string | number) {
     await this.fillSearch(value);
     await this.clickSearch();
     await this.waitForOpened();
   }
 
+  @logStep('Click on Customers table header')
   async clickTableHeader(header: customersSortField) {
     switch (header) {
       case 'email':

@@ -27,4 +27,8 @@ export abstract class BasePage {
       body: (await response.json()) as U,
     };
   }
+
+  async getAuthToken(): Promise<string> {
+    return (await this.page.context().cookies()).find((c) => c.name === 'Authorization')!.value;
+  }
 }

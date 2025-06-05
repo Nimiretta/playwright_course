@@ -2,6 +2,7 @@
 import { ICustomer } from 'types';
 import { DeleteCustomerModal } from '../modals';
 import { SalesPortalPage } from '../salesPortal.page';
+import { logStep } from 'utils';
 
 export class EditCustomerPage extends SalesPortalPage {
   //Modals
@@ -33,6 +34,7 @@ export class EditCustomerPage extends SalesPortalPage {
 
   uniqueElement = this.saveChangesButton;
 
+  @logStep('Fill Edit Customer inputs')
   async fillInputs(customer: Partial<ICustomer>) {
     customer.email && (await this.emailInput.fill(customer.email));
     customer.name && (await this.nameInput.fill(customer.name));
@@ -45,6 +47,7 @@ export class EditCustomerPage extends SalesPortalPage {
     customer.notes && (await this.notesInput.fill(customer.notes));
   }
 
+  @logStep('Get Edit Customer inputs values')
   async getInputValues() {
     const [email, name, country, city, street, house, flat, phone, notes] = await Promise.all([
       this.emailInput.inputValue(),
@@ -60,14 +63,17 @@ export class EditCustomerPage extends SalesPortalPage {
     return { email, name, country, city, street, house, flat, phone, notes };
   }
 
+  @logStep('Click on Save Changes button')
   async clickSaveChanges() {
     await this.saveChangesButton.click();
   }
 
+  @logStep('Click on Delete Customer button')
   async clickDeleteCustomer() {
     await this.deleteCustomerButton.click();
   }
 
+  @logStep('Get validation errors from Edit Customer form')
   async getFormErrors() {
     return {
       email: (await this.emailError.isVisible()) ? await this.emailError.innerText() : null,

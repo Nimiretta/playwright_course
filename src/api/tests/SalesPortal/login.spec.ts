@@ -1,10 +1,10 @@
 import { test, expect } from 'fixtures';
 import { USER_LOGIN, USER_PASSWORD } from 'config';
-import { STATUS_CODES } from 'data';
+import { STATUS_CODES, TAGS } from 'data';
 import { loginSchema } from 'data/schemas';
 import { validateResponse, validateSchema } from 'utils/validations';
 
-test.describe('[API] [Sales Portal] [Login]', () => {
+test.describe('[API] [Sales Portal] [Login]', { tag: [TAGS.API, TAGS.SMOKE] }, () => {
   test('Should login with valid credentials', async ({ signInController }) => {
     const loginResponse = await signInController.login({
       username: USER_LOGIN,
