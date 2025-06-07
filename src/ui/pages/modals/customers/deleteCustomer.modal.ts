@@ -1,3 +1,4 @@
+import { logStep } from 'utils';
 import { Modal } from '../modal.page';
 
 export class DeleteCustomerModal extends Modal {
@@ -6,10 +7,12 @@ export class DeleteCustomerModal extends Modal {
 
   readonly uniqueElement = this.yesDeleteBtn;
 
+  @logStep('Click on Yes, Delete button')
   async clickYesDelete() {
     await this.yesDeleteBtn.click();
   }
 
+  @logStep('Click on Cancel button')
   async clickCancel() {
     await this.cancelBtn.click();
   }

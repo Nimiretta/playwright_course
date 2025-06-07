@@ -2,6 +2,7 @@ import { IMainMetricsValues, MetricTypeMap, ModuleName } from 'types';
 import { SalesPortalPage } from './salesPortal.page';
 import { MAIN_METRICS } from 'data/home';
 import { Locator } from '@playwright/test';
+import { logStep } from 'utils';
 
 export class HomePage extends SalesPortalPage {
   readonly title = this.page.locator('.welcome-text');
@@ -17,6 +18,7 @@ export class HomePage extends SalesPortalPage {
 
   readonly uniqueElement = this.title;
 
+  @logStep('Click on Module button')
   async clickModuleButton(moduleName: ModuleName) {
     const moduleButtons: Record<ModuleName, Locator> = {
       Customers: this.customersButton,
@@ -27,6 +29,7 @@ export class HomePage extends SalesPortalPage {
     await moduleButtons[moduleName].click();
   }
 
+  @logStep('Get main metrics values')
   async getMainMetricsValues(): Promise<IMainMetricsValues> {
     const [ordersThisYear, newCustomers, canceledOrders, totalRevenue, avgOrderValue] = await Promise.all([
       this.getMetricsValueByName(MAIN_METRICS.OrdersThisYear),
@@ -44,6 +47,8 @@ export class HomePage extends SalesPortalPage {
     };
   }
 
+  // @ts-expect-error: TypeScript cannot infer the correct return type for logDecorator
+  @logStep('Get main metric value by name')
   async getMetricsValueByName<T extends keyof MetricTypeMap>(name: T): Promise<MetricTypeMap[T]> {
     let value;
     switch (name) {

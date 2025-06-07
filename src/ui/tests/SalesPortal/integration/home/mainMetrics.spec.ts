@@ -1,3 +1,4 @@
+import { TAGS } from 'data';
 import { DEFAULT_METRICS_RESPONSE, MAIN_METRICS } from 'data/home';
 import { test, expect } from 'fixtures';
 import numeral from 'numeral';
@@ -32,11 +33,15 @@ const metricsTestData: IMetricTestData[] = [
 
 test.describe('[UI] [Home] Main Metrics', () => {
   metricsTestData.forEach(({ metricName, expected }) => {
-    test(`Should display correct '${metricName}' metric`, async ({ loginAsLocalUser, homePage, mock }) => {
-      await mock.metrics(DEFAULT_METRICS_RESPONSE);
-      await loginAsLocalUser();
-      const actual = await homePage.getMetricsValueByName(metricName);
-      expect(actual).toBe(expected);
-    });
+    test(
+      `Should display correct '${metricName}' metric`,
+      { tag: [TAGS.UI, TAGS.REGRESSION] },
+      async ({ homeUIService, homePage, mock }) => {
+        await mock.metrics(DEFAULT_METRICS_RESPONSE);
+        await homeUIService.openAsLoggedInUser();
+        const actual = await homePage.getMetricsValueByName(metricName);
+        expect(actual).toBe(expected);
+      },
+    );
   });
 });

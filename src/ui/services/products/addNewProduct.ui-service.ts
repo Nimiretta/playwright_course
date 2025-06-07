@@ -6,11 +6,13 @@ import _ from 'lodash';
 import { IProduct, IProductResponse } from 'types';
 import { AddNewProductPage, ProductsPage } from 'ui/pages';
 import { PageHolder } from '../base.ui-service';
+import { logStep } from 'utils';
 
 export class AddNewProductUIService extends PageHolder {
   private addNewProductPage = new AddNewProductPage(this.page);
   private productsPage = new ProductsPage(this.page);
 
+  @logStep('Create new Product via UI')
   async create(customData?: IProduct) {
     const data = generateProductData(customData);
     await this.addNewProductPage.fillInputs(data);

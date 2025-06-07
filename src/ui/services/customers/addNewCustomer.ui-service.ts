@@ -6,11 +6,13 @@ import _ from 'lodash';
 import { ICustomer, ICustomerResponse } from 'types';
 import { AddNewCustomerPage, CustomersPage } from 'ui/pages';
 import { PageHolder } from '../base.ui-service';
+import { logStep } from 'utils';
 
 export class AddNewCustomerUIService extends PageHolder {
   private addNewCustomerPage = new AddNewCustomerPage(this.page);
   private customersPage = new CustomersPage(this.page);
 
+  @logStep('Create new Customer on Add New Customer Page')
   async create(customData?: ICustomer) {
     const data = generateCustomerData(customData);
     await this.addNewCustomerPage.fillInputs(data);

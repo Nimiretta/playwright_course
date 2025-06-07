@@ -1,12 +1,12 @@
 import { test, expect } from 'fixtures';
 import { USER_LOGIN, USER_PASSWORD } from 'config';
-import { STATUS_CODES } from 'data';
+import { STATUS_CODES, TAGS } from 'data';
 import { generateCustomerData } from 'data/customers';
 import { allCustomersSchema } from 'data/schemas';
 import { ICustomerFromResponse } from 'types';
 import { validateResponse, validateSchema } from 'utils/validations';
 
-test.describe('[API] [Sales Portal] [Customers]', () => {
+test.describe('[API] [Sales Portal] [Customers]', { tag: [TAGS.API, TAGS.SMOKE, TAGS.REGRESSION] }, () => {
   test('Should get all customers w/o filters', async ({ signInController, customersController }) => {
     const loginResponse = await signInController.login({ username: USER_LOGIN, password: USER_PASSWORD });
 

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { IProduct } from 'types';
 import { SalesPortalPage } from '../salesPortal.page';
+import { logStep } from 'utils';
 
 export class AddNewProductPage extends SalesPortalPage {
   readonly name = this.page.locator('#inputName');
@@ -14,6 +15,7 @@ export class AddNewProductPage extends SalesPortalPage {
 
   readonly uniqueElement = this.name;
 
+  @logStep('Fill in the product form')
   async fillInputs(product: Partial<IProduct>) {
     product.name && (await this.name.fill(String(product.name)));
     product.price && (await this.price.fill(product.price?.toString()));
@@ -22,10 +24,12 @@ export class AddNewProductPage extends SalesPortalPage {
     product.notes && (await this.notes.fill(product.notes));
   }
 
+  @logStep('Get product name error message')
   async getError() {
     return await this.nameError.textContent();
   }
 
+  @logStep('Click on Save New Product button')
   async clickSaveNewProduct() {
     await this.saveNewProductButton.click();
   }

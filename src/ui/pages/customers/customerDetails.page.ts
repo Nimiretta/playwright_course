@@ -1,6 +1,7 @@
 import { COUNTRIES } from 'data/customers';
 import { ICustomer } from 'types';
 import { SalesPortalPage } from '../salesPortal.page';
+import { logStep } from 'utils';
 
 export class CustomerDetailsPage extends SalesPortalPage {
   email = this.page.locator('#customer-email');
@@ -15,6 +16,7 @@ export class CustomerDetailsPage extends SalesPortalPage {
   registrationDate = this.page.locator('#customer-created-on');
   uniqueElement = this.registrationDate;
 
+  @logStep('Directly open Customer Details Page')
   async open(id: string) {
     await this.page.evaluate(async (id: string) => {
       await (
@@ -23,6 +25,7 @@ export class CustomerDetailsPage extends SalesPortalPage {
     }, id);
   }
 
+  @logStep("Get customer's details")
   async getDetails(): Promise<ICustomer & { createdOn: string }> {
     const [email, name, phone, country, city, street, house, flat, notes, registrationDate] = await Promise.all([
       this.email.innerText(),
